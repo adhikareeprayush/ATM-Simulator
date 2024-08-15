@@ -5,27 +5,34 @@
 
 
 #include<iostream>
+#include<vector>
 using namespace std;
 
 class User{
     private:
         string name;
         string accountNumber;
-        int pin[4];
+        string pin;
         double balance;
     public:
-        bool checkPin(int pinNum[]);
+        bool checkPin(string pinNumber);
         bool deposit(double amount);
         bool withdraw(double withdrawBalance);
         double getBalance();
-        bool changePin(int newPin[]);
+        bool changePin(string& pinNumber);
 };
 
-// class ATM: public User{
-//     private:
-        
-
-// }
+class ATM{
+    private:
+        vector<User> users;
+        User* currentUser = nullptr;
+    public:
+        void addUser(const User& user);
+        User* findUser(const string& accountNumber);
+        bool login(const string& accountNumber, const string& pinNumber);
+        void logout();
+        void performTransaction();
+};
 
 int main()
 {
