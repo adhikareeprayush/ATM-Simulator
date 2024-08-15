@@ -15,11 +15,46 @@ class User{
         string pin;
         double balance;
     public:
-        bool checkPin(string pinNumber);
-        bool deposit(double amount);
-        bool withdraw(double withdrawBalance);
-        double getBalance();
-        bool changePin(string& pinNumber);
+        User(string name,string accountNumber, string pin, double balance) : name(name), accountNumber(accountNumber),
+        pin(pin), balance(balance){};
+        bool checkPin(string pinNumber)
+        {
+            return pin == pinNumber;
+            // match true else false
+        }
+        void deposit(double amount)
+        {
+            balance+=amount;
+            cout<< "Your new Balance is: " << balance <<endl;
+        }
+        bool withdraw(double amount)
+        {
+            if(amount <=balance)
+            {
+                balance-=amount;
+                cout<< "Withdrawal Successful! Your new Balance is: " << balance <<endl;
+                return true;
+            }
+            else{
+                cout<<"Insufficient Balance" <<endl;
+                return false;
+            }
+        }
+        double getBalance()
+        {
+            return balance;
+        }
+        bool changePin(const string& pinNumber){
+            pin = pinNumber;
+            cout<< "PIN Changed Successfully" <<endl;
+        }
+        string getName(){
+            return name;
+        }
+        string getAccountNumber()
+        {
+            return accountNumber;
+        }
 };
 
 class ATM{
