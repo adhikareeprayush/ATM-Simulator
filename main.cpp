@@ -274,7 +274,7 @@ class ATM{
 
             } while (choice != 5);
         
-}
+        }
 
         void getUsers()
         {
@@ -283,12 +283,36 @@ class ATM{
                 cout<< user.getName() << endl;
             }
         }
+
+        bool userExists(const string& accountNumber){
+            for(auto& user: users)
+            {
+                if(user.getAccountNumber() == accountNumber)
+                    return true;
+            }
+        }
+
+        void addUser(const User& user)
+        {
+            users.push_back(user);
+            updateFile();
+            cout<< "User added Successfully!" <<endl;
+        }
 };
 
-int main()
+string generateAccountNumber()
+{
+    string accNum;
+    for (int i = 0; i < 12; i++)
+    {
+        accNum += to_string(rand() % 10);
+    }
+    return accNum;
+}
+
+void login()
 {
     ATM atm("user_cred.csv");
-
     string accountNumber, pin;
     cout<< RED << "Enter Account Number: ";
     cin >> accountNumber;
@@ -300,6 +324,62 @@ int main()
     {
         atm.performTransaction();
     }
+}
+
+void userRegister(){
+    ATM atm("user_cred.csv");
+    string name, accountNumber, pinNumber;
+    double balance;
+    cout<< "Enter the name of the user: ";
+    cin.ignore();
+    getline(cin, name);
+    
+    //generate unique account number
+    do{
+        accountNumber = generateAccountNumber();
+    }while(atm.userExists(accountNumber));
+
+    cout<< "Enter the PIN: ";
+    cin >> pinNumber;
+
+    cout << "Enter the balance: ";
+    cin >> balance;
+
+    User user(name, accountNumber, pinNumber, balance);
+    atm.addUser(user);
+}
+
+int main()
+{
+    int option;
+    do
+    {
+        clearScreen();
+        cout<< "Please Select an Option : " <<endl;
+        cout<< "1. Login" <<endl;
+        cout<< "2. Register" <<endl;
+        cout<< "3. End Program"<<endl;
+        cin >> option;
+
+        switch(option)
+        {
+            case 1:
+                login();
+                break;
+            case 2:
+                userRegister();
+                break;
+            case 3:
+                cout<<"Thank you for visiting us! Press enter to ."<<endl;
+                enterToContinue();
+                break;
+            default:
+                cout<<"Invalid Choice! Please Try Again."<<endl;
+                break;
+        }
+    }while(option!=3);
+
+
 
     return 0;
 }
