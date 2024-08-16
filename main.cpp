@@ -290,10 +290,11 @@ int main()
     ATM atm("user_cred.csv");
 
     string accountNumber, pin;
-    cout<< "Enter Account Number: ";
+    cout<< RED << "Enter Account Number: ";
     cin >> accountNumber;
-    cout<< "Enter PIN: ";
+    cout<< RED << "Enter PIN: ";
     cin >> pin;
+    cout<<RESET;
 
     if(atm.login(accountNumber, pin))
     {
