@@ -210,7 +210,7 @@ class ATM{
                 int nameWidth = boxWidth - 16 - 18; // Adjust the padding accordingly
                 int accountWidth = 20;
                 int balanceWidth = boxWidth - 16; // Adjust the padding accordingly
-
+                
                 // Display user information in a boxed layout with colors
                 cout << CYAN << "+-----------------------------------------------------------+" << RESET << endl;
                 cout << CYAN << "| " << RESET << left << setw(nameWidth) << ("Name: " + name)
