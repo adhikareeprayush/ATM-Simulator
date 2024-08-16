@@ -1,13 +1,11 @@
-name: Maintain Repo
-on: [push, pull_request]
+name: Format Code in ATM-Simulator
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
-  maintain:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Format Code with Prettier
-        uses: adhikareeprayush/Format-Code@main
-
-      
-        
+  format-code:
+    uses: adhikareeprayush/Format-Code/.github/workflows/format-code.yml@main
