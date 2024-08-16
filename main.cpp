@@ -19,8 +19,11 @@ using namespace std;
 void clearScreen() {
     #ifdef _WIN32
     system("cls");
+    
     #else
-        system("clear");
+    
+        system
+            ("clear");
     #endif
 }
 
