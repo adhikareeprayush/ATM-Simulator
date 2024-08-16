@@ -65,30 +65,53 @@ class ATM{
         }
 
         void loadUsersFromFile(const std::string& filename) {
-            std::ifstream file(filename);
-            if (!file) {
-                std::cerr << "Error opening file: " << filename << std::endl;
-                return;
-            }
-            
-            std::string line;
-            while (std::getline(file, line)) {
-                std::stringstream ss(line);
-                std::string name, accountNumber, pin, balanceStr;
-                double balance;
+    std::ifstream file(filename);
+    if (!file) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return;
+    }
 
-                std::getline(ss, name, ',');
-                std::getline(ss, accountNumber, ',');
-                std::getline(ss, pin, ',');
-                std::getline(ss, balanceStr, ',');
+    std::string line;
+    // Skip the first header line
+    std::getline(file, line);
 
-                balance = std::stod(balanceStr);
-
-                users.push_back(User(name, accountNumber, pin, balance));
-            }
-
-            file.close();
+    while (std::getline(file, line)) {
+        // Remove the trailing semicolon if present
+        if (line.back() == ';') {
+            line.pop_back();
         }
+
+        std::stringstream ss(line);
+        std::string name, accountNumber, pin, balanceStr;
+        double balance;
+
+        std::getline(ss, name, ',');
+        std::getline(ss, accountNumber, ',');
+        std::getline(ss, pin, ',');
+        std::getline(ss, balanceStr, ',');
+
+        // Trim any extra whitespace (optional)
+        name.erase(0, name.find_first_not_of(" \t"));
+        name.erase(name.find_last_not_of(" \t") + 1);
+        accountNumber.erase(0, accountNumber.find_first_not_of(" \t"));
+        accountNumber.erase(accountNumber.find_last_not_of(" \t") + 1);
+        pin.erase(0, pin.find_first_not_of(" \t"));
+        pin.erase(pin.find_last_not_of(" \t") + 1);
+        balanceStr.erase(0, balanceStr.find_first_not_of(" \t"));
+        balanceStr.erase(balanceStr.find_last_not_of(" \t") + 1);
+
+        try {
+            balance = std::stod(balanceStr);
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Invalid balance format: " << balanceStr << " in line: " << line << std::endl;
+            continue;
+        }
+
+        users.push_back(User(name, accountNumber, pin, balance));
+    }
+
+    file.close();
+    }       
 
         User* findUser(const string& accountNumber){
             for(auto& user: users)
@@ -187,7 +210,7 @@ int main()
     ATM atm("user_cred.txt");
 
     // string accountNumber, pin;
-    // cout<< "Enter the account number: ";
+    // cout<< "Enter the account number: "; nice note
     // cin>>accountNumber;
     // cout<<"Enter the PIN: ";
     // cin>>pin;
