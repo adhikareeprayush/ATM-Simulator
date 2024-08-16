@@ -7,6 +7,6 @@ jobs:
     
     steps:
       - name: Format Code with Prettier
-        uses: adhikareeprayush/Format-Code@v1
+        uses: adhikareeprayush/Format-Code@v1.0
       
         
