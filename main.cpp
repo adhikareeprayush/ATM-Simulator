@@ -171,9 +171,9 @@ class ATM{
 
         void updateFile()
         {
-            ofstream file("../user_cred.csv");
+            ofstream file("user_cred.csv");
             if (!file) {
-                cerr << "Error opening file: " << "../user_cred.txt" << endl;
+                cerr << "Error opening file: " << "user_cred.txt" << endl;
                 return;
             }
             file << "Name,Account Number,PIN,Balance\n";
@@ -241,8 +241,8 @@ class ATM{
                         cout << "\nEnter the amount to deposit: ";
                         cin >> amount;
                         currentUser->deposit(amount);
-                        updateFile();
                         enterToContinue();
+                        updateFile();
                         break;
                     }
                     case 3: {
@@ -259,8 +259,8 @@ class ATM{
                         cout << "\nEnter new PIN: ";
                         cin >> newPin;
                         currentUser->changePin(newPin);
-                        updateFile();
                         enterToContinue();
+                        updateFile();
                         break;
                     }
                     case 5:
@@ -287,7 +287,7 @@ class ATM{
 
 int main()
 {
-    ATM atm("../user_cred.csv");
+    ATM atm("user_cred.csv");
 
     string accountNumber, pin;
     cout<< "Enter Account Number: ";
