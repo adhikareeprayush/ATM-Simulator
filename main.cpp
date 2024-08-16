@@ -1,12 +1,9 @@
-//ATM SIMULATOR
-// USER CLASS
-// VIEW, WITHDRAW, DEPOSIT, CHANGE PIN
-// CHECK USER PIN, BALANCE CHECK IF TRANSACTION IS POSSIBLE OR NOT, HISTORY MAINTAINANCE
-
-
 #include<iostream>
 #include<vector>
 #include<string>
+#include<fstream>
+#include<sstream>
+
 using namespace std;
 
 class User{
@@ -63,9 +60,36 @@ class ATM{
         vector<User> users;
         User* currentUser = nullptr;
     public:
-        void addUser(const User& user){
-            users.push_back(user);
+        ATM(const std::string& filename) {
+            loadUsersFromFile(filename);
         }
+
+        void loadUsersFromFile(const std::string& filename) {
+            std::ifstream file(filename);
+            if (!file) {
+                std::cerr << "Error opening file: " << filename << std::endl;
+                return;
+            }
+            
+            std::string line;
+            while (std::getline(file, line)) {
+                std::stringstream ss(line);
+                std::string name, accountNumber, pin, balanceStr;
+                double balance;
+
+                std::getline(ss, name, ',');
+                std::getline(ss, accountNumber, ',');
+                std::getline(ss, pin, ',');
+                std::getline(ss, balanceStr, ',');
+
+                balance = std::stod(balanceStr);
+
+                users.push_back(User(name, accountNumber, pin, balance));
+            }
+
+            file.close();
+        }
+
         User* findUser(const string& accountNumber){
             for(auto& user: users)
             {
@@ -148,24 +172,31 @@ class ATM{
 
             }while(choice != 5);
         }
+
+        void getUsers()
+        {
+            for(auto& user: users)
+            {
+                cout<< user.getName() << endl;
+            }
+        }
 };
 
 int main()
 {
-    ATM atm;
+    ATM atm("user_cred.txt");
 
-    atm.addUser(User("John Doe", "123456789", "1234", 1000.00));
-    atm.addUser(User("Jane Smith", "987654321", "5678", 500.00));
+    // string accountNumber, pin;
+    // cout<< "Enter the account number: ";
+    // cin>>accountNumber;
+    // cout<<"Enter the PIN: ";
+    // cin>>pin;
 
-    std::string accountNumber, pin;
-
-    std::cout << "Enter account number: ";
-    std::cin >> accountNumber;
-    std::cout << "Enter PIN: ";
-    std::cin >> pin;
-
-    if (atm.login(accountNumber, pin)) {
-        atm.performTransaction();
-    }
+    // if (atm.login(accountNumber, pin)) {
+    //     atm.performTransaction();
+    // }
+    // else{
+    //     cout<<"Invalid Credentials!"<<endl;
+    // }
     return 0;
 }

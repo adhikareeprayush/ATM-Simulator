@@ -1,0 +1,4 @@
+Name,AccountNumber,PIN,Balance
+Prayush Adhikari,123456781234,0909,12.01
+John Doe,123456789,1234,1000.00
+Jane Smith,987654321,5678,500.00
