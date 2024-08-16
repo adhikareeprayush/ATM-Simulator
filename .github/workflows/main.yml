@@ -1,0 +1,10 @@
+name: Maintain Repo
+on: [push, pull_request]
+
+jobs:
+  maintain:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Format Code with Prettier
+        uses: adhikareeprayush/format-code@v1
