@@ -296,9 +296,24 @@ class ATM{
         {
             users.push_back(user);
             updateFile();
-            cout<< "User added Successfully!" <<endl;
+            cout<< GREEN<< "User added Successfully!" <<endl;
         }
 };
+
+bool isPinValid(const string& pinNumber, const string& confirmPIN)
+{
+    if(pinNumber.length() !=4)
+    {
+        cout<< RED << "The  PIN should contain 4 Digits!" <<endl << RESET;
+        return false;
+    }   
+    else if(pinNumber != confirmPIN)
+    {
+        cout<<RED<<"PIN didn't match! Please try again." <<endl << RESET;
+        return false;
+    }
+    return true;
+}
 
 string generateAccountNumber()
 {
@@ -328,7 +343,7 @@ void login()
 
 void userRegister(){
     ATM atm("user_cred.csv");
-    string name, accountNumber, pinNumber;
+    string name, accountNumber, pinNumber, confirmPin;
     double balance;
     cout<< "Enter the name of the user: ";
     cin.ignore();
@@ -339,14 +354,40 @@ void userRegister(){
         accountNumber = generateAccountNumber();
     }while(atm.userExists(accountNumber));
 
-    cout<< "Enter the PIN: ";
-    cin >> pinNumber;
+    do{
+        cout<< "Enter the PIN: ";
+        cin >> pinNumber;
+
+        cout<< "Re-enter the PIN: ";
+        cin >> confirmPin;
+    }while(!isPinValid(pinNumber,confirmPin));
+
 
     cout << "Enter the balance: ";
     cin >> balance;
 
     User user(name, accountNumber, pinNumber, balance);
     atm.addUser(user);
+    clearScreen();
+
+    string balanceStr = "$" + to_string(balance);
+
+    // Ensure the widths match the box length
+    int boxWidth = 61;
+    int nameWidth = boxWidth - 16 - 18; // Adjust the padding accordingly
+    int accountWidth = 20;
+    int balanceWidth = boxWidth - balanceStr.length(); // Adjust the padding accordingly
+    
+    // Display user information in a boxed layout with colors
+    cout << CYAN << "+-----------------------------------------------------------+" << RESET << endl;
+    cout << CYAN << "| " << RESET << left << setw(nameWidth) << ("Name: " + name)
+        << CYAN << "| " << RESET << setw(accountWidth) << ("Account Number: " + accountNumber) << CYAN << " |\n";
+    cout << CYAN << "+-----------------------------------------------------------+" << RESET << endl;
+    cout << CYAN << "| " << RESET << setw(balanceWidth) << "Current Balance: " << YELLOW << setw(10) << balanceStr << RESET << CYAN << " |\n";
+    cout << CYAN << "+-----------------------------------------------------------+" << RESET << endl;
+
+    cout<<GREEN<<"\n\n Successfully Created Account! Please note the credentials."<<endl;
+    enterToContinue();
 }
 
 int main()
@@ -360,7 +401,6 @@ int main()
         cout<< "2. Register" <<endl;
         cout<< "3. End Program"<<endl;
         cin >> option;
-
         switch(option)
         {
             case 1:
@@ -378,8 +418,5 @@ int main()
                 break;
         }
     }while(option!=3);
-
-
-
     return 0;
 }
