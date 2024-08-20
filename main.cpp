@@ -5,6 +5,7 @@
 #include<sstream>
 #include <iomanip>  // For formatting
 #include <cstdlib>  // For system("clear") or system("cls") depending on the OS
+#include<limits>
 
 // ANSI color codes
 #define RESET "\033[0m"
@@ -12,7 +13,6 @@
 #define GREEN "\033[32m"
 #define YELLOW "\033[33m"
 #define CYAN "\033[36m"
-
 //User_cred Path
 #define USER_CRED "user_cred.csv"
 
@@ -28,6 +28,29 @@ void clearScreen() {
     #endif
 }
 
+
+int getValidOption()
+{
+    int option;
+    while(true)
+    {
+        cout<<GREEN<<"Please, Enter a valid option : ";
+        cin>>option;
+        cout<<RESET;
+
+        // option input validation check if digit
+        if(cin.fail())
+        {
+            cout <<RED<< "Invalid input. Please enter a valid integer." <<endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        else{
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return option;
+        }
+    }
+}
 void enterToContinue() {
     cout << "Press Enter to continue...";
     cin.ignore();
@@ -227,21 +250,15 @@ class ATM{
 
                 // Display the ATM menu
                 cout << GREEN << "\nATM MENU:\n" << RESET;
-                cout << "1. View Balance\n";
-                cout << "2. Deposit Money\n";
-                cout << "3. Withdraw Money\n";
-                cout << "4. Change PIN\n";
-                cout << "5. Logout\n";
-                cout << "\nENTER YOUR CHOICE: ";
-                cin >> choice;
+                cout << "1. Deposit Money\n";
+                cout << "2. Withdraw Money\n";
+                cout << "3. Change PIN\n";
+                cout << "4. Logout\n";
+                choice = getValidOption();
 
                 // Handle the user's choice
                 switch (choice) {
-                    case 1:
-                        cout << GREEN << "\nYour Current Balance: $" << currentUser->getBalance() << RESET << endl;
-                        enterToContinue();
-                        break;
-                    case 2: {
+                    case 1: {
                         double amount;
                         cout << "\nEnter the amount to deposit: ";
                         cin >> amount;
@@ -250,7 +267,7 @@ class ATM{
                         updateFile();
                         break;
                     }
-                    case 3: {
+                    case 2: {
                         double amount;
                         cout << "\nEnter the amount to withdraw: ";
                         cin >> amount;
@@ -259,7 +276,7 @@ class ATM{
                         enterToContinue();
                         break;
                     }
-                    case 4: {
+                    case 3: {
                         string newPin;
                         cout << "\nEnter new PIN: ";
                         cin >> newPin;
@@ -268,7 +285,7 @@ class ATM{
                         updateFile();
                         break;
                     }
-                    case 5:
+                    case 4:
                         logout();
                         enterToContinue();
                         break;
@@ -277,7 +294,7 @@ class ATM{
                         enterToContinue();
                 }
 
-            } while (choice != 5);
+            } while (choice != 4);
         
         }
 
@@ -377,35 +394,43 @@ void userRegister(){
 
     string balanceStr = "$" + to_string(balance);
 
-    // Ensure the widths match the box length
+     // Ensure the widths match the box length
     int boxWidth = 61;
     int nameWidth = boxWidth - 16 - 18; // Adjust the padding accordingly
     int accountWidth = 20;
-    int balanceWidth = boxWidth - balanceStr.length(); // Adjust the padding accordingly
-    
+    int balanceStrLength = balanceStr.length();
+    int balancePadding = boxWidth - 16 - balanceStrLength - 3; // -3 for the spaces and | at the end
+
     // Display user information in a boxed layout with colors
     cout << CYAN << "+-----------------------------------------------------------+" << RESET << endl;
     cout << CYAN << "| " << RESET << left << setw(nameWidth) << ("Name: " + name)
         << CYAN << "| " << RESET << setw(accountWidth) << ("Account Number: " + accountNumber) << CYAN << " |\n";
     cout << CYAN << "+-----------------------------------------------------------+" << RESET << endl;
-    cout << CYAN << "| " << RESET << setw(balanceWidth) << "Current Balance: " << YELLOW << balanceStr << RESET << CYAN << " |\n";
+    cout << CYAN << "| " << RESET << "Current Balance:" 
+        << setw(balancePadding-1) << " " << YELLOW << balanceStr << RESET << CYAN << " |\n";
     cout << CYAN << "+-----------------------------------------------------------+" << RESET << endl;
 
-    cout<<GREEN<<"\n\n Successfully Created Account! Please note the credentials."<<endl;
+    cout<<GREEN<<"\n\nSuccessfully Created Account! Please note the credentials."<<endl;
     enterToContinue();
 }
+
+
+
 
 int main()
 {
     int option;
     do
     {
+        cout<<RESET;
         clearScreen();
         cout<< "Please Select an Option : " <<endl;
         cout<< "1. Login" <<endl;
         cout<< "2. Register" <<endl;
         cout<< "3. End Program"<<endl;
-        cin >> option;
+        option = getValidOption();
+
+    
         switch(option)
         {
             case 1:
