@@ -13,6 +13,9 @@
 #define YELLOW "\033[33m"
 #define CYAN "\033[36m"
 
+//User_cred Path
+#define USER_CRED "user_cred.csv"
+
 using namespace std;
 
 // function to clear the screen 
@@ -171,7 +174,7 @@ class ATM{
 
         void updateFile()
         {
-            ofstream file("user_cred.csv");
+            ofstream file(USER_CRED);
             if (!file) {
                 cerr << "Error opening file: " << "user_cred.txt" << endl;
                 return;
@@ -210,14 +213,16 @@ class ATM{
                 int boxWidth = 61;
                 int nameWidth = boxWidth - 16 - 18; // Adjust the padding accordingly
                 int accountWidth = 20;
-                int balanceWidth = boxWidth - 16; // Adjust the padding accordingly
-                
+                int balanceStrLength = balanceStr.length();
+                int balancePadding = boxWidth - 16 - balanceStrLength - 3; // -3 for the spaces and | at the end
+
                 // Display user information in a boxed layout with colors
                 cout << CYAN << "+-----------------------------------------------------------+" << RESET << endl;
                 cout << CYAN << "| " << RESET << left << setw(nameWidth) << ("Name: " + name)
                     << CYAN << "| " << RESET << setw(accountWidth) << ("Account Number: " + accountNumber) << CYAN << " |\n";
                 cout << CYAN << "+-----------------------------------------------------------+" << RESET << endl;
-                cout << CYAN << "| " << RESET << setw(balanceWidth) << "Current Balance: " << YELLOW << setw(10) << balanceStr << RESET << CYAN << " |\n";
+                cout << CYAN << "| " << RESET << "Current Balance:" 
+                    << setw(balancePadding-1) << " " << YELLOW << balanceStr << RESET << CYAN << " |\n";
                 cout << CYAN << "+-----------------------------------------------------------+" << RESET << endl;
 
                 // Display the ATM menu
@@ -327,7 +332,7 @@ string generateAccountNumber()
 
 void login()
 {
-    ATM atm("user_cred.csv");
+    ATM atm(USER_CRED);
     string accountNumber, pin;
     cout<< RED << "Enter Account Number: ";
     cin >> accountNumber;
@@ -342,7 +347,7 @@ void login()
 }
 
 void userRegister(){
-    ATM atm("user_cred.csv");
+    ATM atm(USER_CRED);
     string name, accountNumber, pinNumber, confirmPin;
     double balance;
     cout<< "Enter the name of the user: ";
@@ -383,7 +388,7 @@ void userRegister(){
     cout << CYAN << "| " << RESET << left << setw(nameWidth) << ("Name: " + name)
         << CYAN << "| " << RESET << setw(accountWidth) << ("Account Number: " + accountNumber) << CYAN << " |\n";
     cout << CYAN << "+-----------------------------------------------------------+" << RESET << endl;
-    cout << CYAN << "| " << RESET << setw(balanceWidth) << "Current Balance: " << YELLOW << setw(10) << balanceStr << RESET << CYAN << " |\n";
+    cout << CYAN << "| " << RESET << setw(balanceWidth) << "Current Balance: " << YELLOW << balanceStr << RESET << CYAN << " |\n";
     cout << CYAN << "+-----------------------------------------------------------+" << RESET << endl;
 
     cout<<GREEN<<"\n\n Successfully Created Account! Please note the credentials."<<endl;
