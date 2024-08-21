@@ -16,7 +16,7 @@ bool User::checkPin(const std::string& pinNumber)
 void User::deposit(double amount)
 {
     balance+=amount;
-    std::cout<< "Your new Balance is: " << balance <<std::endl;
+    std::cout<< CYAN << "Your new Balance is: " << balance <<std::endl <<RESET;
 }
 
 bool User::withdraw(double amount)
@@ -24,11 +24,11 @@ bool User::withdraw(double amount)
     if(amount <=balance)
     {
         balance-=amount;
-        std::cout<< "Withdrawal Successful! Your new Balance is: " << balance <<std::endl;
+        std::cout<< GREEN <<"Withdrawal Successful! Your new Balance is: " << balance <<std::endl <<RESET;
         return true;
     }
     else{
-        std::cout<<"Insufficient Balance" <<std::endl;
+        std::cout<<RED<<"Insufficient Balance" <<std::endl << RESET;
         return false;
     }
 }
@@ -40,8 +40,13 @@ double User::getBalance()
 
 bool User::changePin(const std::string& pinNumber)
 {
+    if(pinNumber.length() !=4 )
+    {
+        std::cout <<RED << "The PIN should contain only 4 Digits!"<<RESET <<std::endl;
+        return false;
+    } 
     pin = pinNumber;
-    std::cout<<"PIN Changed Successfully"<<std::endl;
+    std::cout<<GREEN<<"PIN Changed Successfully"<<std::endl<<GREEN;
     return true;
 }
 

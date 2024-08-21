@@ -5,7 +5,7 @@ int main() {
     int option;
     do {
         clearScreen();
-        std::cout << "1. Register\n2. Login\n0. Exit" << std::endl;
+        std::cout << GREEN << "1. Register\n2. Login\n3. Quit" << std::endl <<RESET;
         option = getValidOption();
 
         switch (option) {
@@ -15,13 +15,13 @@ int main() {
             case 2:
                 login();
                 break;
-            case 0:
-                std::cout << "Thank you for using the ATM Simulator!" << std::endl;
+            case 3:
+                std::cout << GREEN<< "Thank you for using the ATM Simulator!" << std::endl <<RESET;
                 break;
             default:
-                std::cout << "Invalid option. Please try again." << std::endl;
+                std::cout << RED << "Invalid option. Please try again." << std::endl;
                 break;
         }
-    } while (option != 0);
+    } while (option != 3);
     return 0;
 }

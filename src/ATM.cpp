@@ -66,11 +66,11 @@ bool ATM::login(const std::string& accountNumber, const std::string& pinNumber)
 {
     currentUser = findUser(accountNumber);
     if(currentUser && currentUser->checkPin(pinNumber)){
-        std::cout<<"LOGIN SUCCESSFUL. Welcome, " <<currentUser->getName() << "!" <<std::endl;
+        std::cout<<GREEN<<"LOGIN SUCCESSFUL. Welcome, " <<currentUser->getName() << "!" <<std::endl <<RESET;
         return true;
     }
     else{
-        std::cout<<"LOGIN FAILED! Incorrect Account Number or PIN" <<std::endl;
+        std::cout<<RED<<"LOGIN FAILED! Incorrect Account Number or PIN" <<std::endl<<RESET;
         enterToContinue();
         return false;
     }
@@ -81,7 +81,7 @@ void ATM::updateFile()
     std::ofstream file(USER_CRED);
     if(!file)
     {
-        std::cerr <<"ERROR OPENING FILE: " <<"user_cred.txt" <<std::endl;
+        std::cerr <<RED <<"ERROR OPENING FILE: " <<"user_cred.txt" <<std::endl <<RESET;
         return;
     }
     file << "Name,Account Number,PIN,Balance\n";
@@ -95,7 +95,7 @@ void ATM::updateFile()
 void ATM::logout()
 {
     currentUser = nullptr;
-    std::cout << "Logged Out Successfully!"<<std::endl;
+    std::cout << GREEN << "Logged Out Successfully!"<<std::endl <<RESET;
 }
 
 void ATM::performTransaction(const std::string& accountNumber)
@@ -145,8 +145,9 @@ void ATM::performTransaction(const std::string& accountNumber)
         switch (choice) {
             case 1: {
                 double amount;
-                std::cout << "\nEnter the amount to deposit: ";
+                std::cout<<GREEN << "\nEnter the amount to deposit: ";
                 std::cin >> amount;
+                std::cout<<RESET;
                 currentUser->deposit(amount);
                 enterToContinue();
                 updateFile();
@@ -154,8 +155,9 @@ void ATM::performTransaction(const std::string& accountNumber)
             }
             case 2: {
                 double amount;
-                std::cout << "\nEnter the amount to withdraw: ";
+                std::cout <<RED << "\nEnter the amount to withdraw: ";
                 std::cin >> amount;
+                std::cout <<RESET;
                 currentUser->withdraw(amount);
                 updateFile();
                 enterToContinue();
@@ -163,8 +165,9 @@ void ATM::performTransaction(const std::string& accountNumber)
             }
             case 3: {
                 std::string newPin;
-                std::cout << "\nEnter new PIN: ";
+                std::cout << RED <<"\nEnter new PIN: ";
                 std::cin >> newPin;
+                std::cout<<RESET;
                 currentUser->changePin(newPin);
                 enterToContinue();
                 updateFile();
@@ -200,5 +203,5 @@ bool ATM::userExists(const std::string& accountNumber) {
 void ATM::addUser(const User& user) {
     users.push_back(user);
     updateFile();
-    std::cout << "User added Successfully!" << std::endl;
+    std::cout << GREEN <<"User added Successfully!" << std::endl << RESET;
 }

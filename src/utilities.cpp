@@ -18,11 +18,12 @@ void clearScreen() {
 int getValidOption() {
     int option;
     while(true) {
-        cout << "Enter an option: ";
+        cout <<GREEN << "Enter an option: ";
         cin >> option;
+        cout<<RESET;
 
         if(cin.fail()) {
-            cout << "Invalid input. Please enter a valid integer." << endl;
+            cout <<RED<< "Invalid input. Please enter a valid integer." << endl <<RESET;
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         } else {
@@ -33,7 +34,7 @@ int getValidOption() {
 }
 
 void enterToContinue() {
-    cout << "Press Enter to continue...";
+    cout << CYAN << "Press Enter to continue..." <<RESET;
     cin.ignore();
     cin.get();
 }
@@ -43,7 +44,7 @@ bool isPinValid(const string& pinNumber, const string& confirmPIN) {
         cout << "The PIN should contain 4 Digits!" << endl;
         return false;
     } else if(pinNumber != confirmPIN) {
-        cout << "PIN didn't match! Please try again." << endl;
+        cout <<RED<< "PIN didn't match! Please try again." << endl <<RESET;
         return false;
     }
     return true;
@@ -60,11 +61,11 @@ string generateAccountNumber() {
 void login() {
     ATM atm(USER_CRED);
     string accountNumber, pin;
-    cout << "Enter Account Number: ";
+    cout << CYAN << "Enter Account Number: ";
     cin >> accountNumber;
     cout << "Enter PIN: ";
     cin >> pin;
-
+    cout<<RESET;
     if(atm.login(accountNumber, pin)) {
         atm.performTransaction(accountNumber);
     }
@@ -74,7 +75,7 @@ void userRegister() {
     ATM atm(USER_CRED);
     string name, accountNumber, pinNumber, confirmPin;
     double balance;
-    cout << "Enter the name of the user: ";
+    cout << GREEN << "Enter the name of the user: ";
     getline(cin, name);
     
     do {
@@ -82,17 +83,18 @@ void userRegister() {
     } while(atm.userExists(accountNumber));
 
     do {
-        cout << "Enter the PIN: ";
+        cout << RED<<"Enter the PIN: ";
         cin >> pinNumber;
         cout << "Re-enter the PIN: ";
         cin >> confirmPin;
     } while(!isPinValid(pinNumber, confirmPin));
 
-    cout << "Enter the balance: ";
+    cout << CYAN <<"Enter the balance: ";
     cin >> balance;
 
     User user(name, accountNumber, pinNumber, balance);
     atm.addUser(user);
+    cout<<RESET;
     clearScreen();
     // Display the new user's information
 
